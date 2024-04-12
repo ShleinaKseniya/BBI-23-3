@@ -1,82 +1,112 @@
-﻿using System;
+﻿
 
-struct Team
+using System.Diagnostics;
+using System.Xml.Linq;
+
+class Team
 {
-    private string _name;
-    private int _scoredgoals;
-    private int _concededgoals;
-    private int _total;
+    private string Name;
+    public int Grade;
+    
 
-    public string Name => _name;
-    public int scoredgoals => _scoredgoals;
-    public int concededgoals => _concededgoals;
-    public int Total => _total;
-
-    public Team(string Name, int scoredgoals, int concededgoals)
+    public Team(string name)
     {
-        this._name = Name;
-        this._scoredgoals = scoredgoals;
-        this._concededgoals = concededgoals;
-        if (scoredgoals > concededgoals)
+        Name = name;
+    }
+    public string GetName()
+    {
+        return Name;
+    }
+    public void GetInfo()
+    {
+        Console.WriteLine($"{Name} Количество очков: {Grade}");
+
+    }
+
+
+}
+class Play
+{
+    public Team Team1;
+    public Team Team2;
+    private int Score1;
+    private int Score2;
+    public Play( Team team1, Team team2, int score1, int score2)
+    {
+        Team1 = team1;
+        Team2 = team2;
+        Score1 = score1;
+        Score2 = score2;
+    }
+    public void CalculateScore()
+    {
+        if(Score1>Score2)
         {
-            _total = 3;
+            Team1.Grade += 3;
+            
         }
-        else if (scoredgoals == concededgoals)
+        else if (Score1 < Score2)
         {
-            _total = 1;
+            Team2.Grade += 3;
+            
         }
         else
         {
-            _total = 0;
+            Team1.Grade += 1;
+            Team2.Grade += 1;
+            
         }
+        
     }
+    
 
-    public string PrintTeamInfo()
-    {
-        return $"{Name}: {Total} очков";
-    }
+
 }
 
-class Program
+internal class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        Team[] teams = new Team[5];
-        teams[0] = new Team("Wolves", 3, 1);
-        teams[1] = new Team("Tigers", 2, 2);
-        teams[2] = new Team("Bears", 0, 1);
-        teams[3] = new Team("Bulldogs", 3, 2);
-        teams[4] = new Team("Chempions", 3, 3);
+        Team teams1 = new Team("Динамо");
+        Team teams2 = new Team("Cпартак");
+        Team teams3 = new Team("Локомотив");
 
-        for (int i = 0; i < teams.Length - 1; i++)
+        Play play1 = new Play(teams1, teams2, 3, 2);
+        Play play2 = new Play(teams1, teams3, 3, 3);
+        Play play3 = new Play(teams2, teams3, 1, 2);
+
+        Play []mass = { play1, play2, play3 };
+        for(int i = 0; i < mass.Length; i++)
         {
-            for (int j = i + 1; j < teams.Length; j++)
+            mass[i].CalculateScore();
+        }
+        for (int i = 0; i < mass.Length; i++)
+        {
+            for (int j = 0; j < mass.Length - 1; j++)
             {
+                if (mass[j].Team1.Grade < mass[j + 1].Team2.Grade)
+                {
+                    Play a = mass[j];
+                    mass[j] = mass[j + 1];
+                    mass[j + 1] = a;
+                }
 
-                if (teams[i].Total < teams[j].Total)
-                {
-                    Team temp = teams[i];
-                    teams[i] = teams[j];
-                    teams[j] = temp;
-                }
-                else if (teams[i].Total == teams[j].Total)
-                {
-                    int diff1 = teams[i].scoredgoals - teams[i].concededgoals;
-                    int diff2 = teams[j].scoredgoals - teams[j].concededgoals;
-                    if (diff1 < diff2)
-                    {
-                        Team temp = teams[i];
-                        teams[i] = teams[j];
-                        teams[j] = temp;
-                    }
-                }
             }
+
+
+
+        }
+        Team[] mess = { teams1, teams2, teams3 }; 
+        int b = 1;
+        for (int i = 0; i < mess.Length; i++)
+        {
+            Console.Write($"{b} Место ");
+            mess[i].GetInfo();
+            b++;
         }
 
-        Console.WriteLine("Таблица результатов:");
-        for (int i = 0; i < teams.Length; i++)
-        {
-            Console.WriteLine($"{i + 1}. {teams[i].PrintTeamInfo()}");
-        }
+
+
+
     }
 }
