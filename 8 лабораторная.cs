@@ -137,20 +137,25 @@ class Task5 : Task
     public void PrintLetterFrequencies()
     {
         Dictionary<char, int> letterCounts = new Dictionary<char, int>();
-
+        
         string[] words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
+        
         foreach (string word in words)
         {
+           
+            
             char firstLetter = char.ToUpper(word[0]);
+            if (char.IsLetter(firstLetter))
+            { 
 
-            if (letterCounts.ContainsKey(firstLetter))
-            {
-                letterCounts[firstLetter]++;
-            }
-            else
-            {
-                letterCounts[firstLetter] = 1;
+                if (letterCounts.ContainsKey(firstLetter))
+                {
+                    letterCounts[firstLetter]++;
+                }
+                else
+                {
+                    letterCounts[firstLetter] = 1;
+                }
             }
         }
 
