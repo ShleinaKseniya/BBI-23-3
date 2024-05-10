@@ -184,12 +184,16 @@ class Task11 : Task
         {
             for (int j = 0; j < lastNames.Count - i - 1; j++)
             {
-                if (lastNames[j].CompareTo(lastNames[j+1]) > 0)
                 {
-                    string temp = lastNames[j];
-                    lastNames[j] = lastNames[j + 1];
-                    lastNames[j + 1] = temp;
+                    if (lastNames[j][0] > lastNames[j + 1][0])
+                    {
+                        string temp = lastNames[j];
+                        lastNames[j] = lastNames[j + 1];
+                        lastNames[j + 1] = temp;
+                    }
                 }
+
+
             }
         }
 
